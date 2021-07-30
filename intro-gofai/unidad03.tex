@@ -1,0 +1,930 @@
+\documentclass{article}
+\usepackage{fleqn}
+\usepackage{epsf}
+\usepackage[dvips]{color}
+\usepackage{aima2e-slides}
+
+\begin{document}
+
+\begin{huge}
+\titleslide{B{\'u}squeda y resoluci{\'o}n de problemas}{Cap{\'\i}tulo 3, Secciones 1--5}
+
+\sf
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \heading{Reminders}
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Contenido}
+
+\blob Agentes solucionadores de problemas
+
+\blob Tipos de problemas
+
+\blob Formulaci{\'o}n de problemas
+
+\blob Problemas de ejemplo
+
+\blob Algoritmos b{\'a}sicos de b{\'u}squeda
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Agentes solucionadores de problemas}
+
+Forma restringida de una agente universal:
+
+\input{\file{algorithms}{simple-PS-agent-algorithm}}
+
+Note que esta es una forma de resoluci{\'o}n sin conexi{\'o}n con
+el mundo (offline).
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Agentes solucionadores de problemas}
+
+La soluci{\'o}n es ejecutada ``con los ojos cerrados". El agente
+asume que ese es todo el conocimiento que se tiene (y se puede
+tener) del ambiente (conocimiento completo). Una suposici{\'o}n
+normalmente equivocada, pero suficiente en muchos casos.
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{El ejemplo de Ruman{\'\i}a}
+
+
+Estoy de vacaciones en Ruman{\'\i}a. En estos momentos estoy en
+Arad.\\
+Mi avi{\'o}n de vuelta a Venezuela sale ma{\~n}ana de Bucarest.
+
+\txb{Formule la meta}:\nl Estar en Bucarest.
+
+\txb{Formule el problema}:\nl \txr{\em Estados}: Las diferentes
+ciudades \nl \txr{\em Acciones}: conducir mi auto entre las
+ciudades.
+
+\txb{Encuentra la soluci{\'o}n}:\nl Una secuencia de ciudades,
+e.g. Arad, Sibiu, Fagaras, Bucarest.
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{El ejemplo de Ruman{\'\i}a}
+
+
+\epsfxsize=\maxfigwidth
+\fig{\file{figures}{romania-distances.ps}}
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Tipos de problemas}
+
+\txb{Deterministico, completamente observable} $\Longrightarrow$
+\txr{\em problema de un s{\'o}lo estado}\nl
+    El agente sabe exactamente a cual estado arribar{\'a}. La
+    soluci{\'o}n es una secuencia de estados (o acciones).
+
+\txb{No observable} $\Longrightarrow$ \txr{\em problema de
+m{\'u}ltiples estados}\nl
+    El agente puede no tener idea de donde est{\'a}. La soluci{\'o}n, si
+    existe, es una colecci{\'o}n de estados posibles a donde
+    arribar{\'\i}a. El agente si conoce el efecto de sus acciones.
+    Piensen cuan exigente es esta {\'u}ltima condici{\'o}n.
+
+\txb{No-deterministico o parcialmente observable}
+$\Longrightarrow$ \txr{\em problem de contigencias}\nl Los
+perceptos proveen \txr{\em nueva} informaci{\'o}n sobre el estado
+actual\nl La soluci{\'o}n es un \txr{\em tree} or una \txr{\em
+pol{\'\i}tica} (varias ramas del {\'a}rbol). Normalmente se
+solapan b{\'u}squeda y ejecuci{\'o}n.
+
+\txb{Espacio de estados desconocido} $\Longrightarrow$ \txr{\em
+problem de exploraci{\'o}n} (``online'')
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{El ejemplo del mundo de la aspiradora}
+
+\begin{tabular}{lr}
+\hbox{\begin{minipage}[t]{0.6\textwidth} \txb{Estado simple},
+comienza en \#5. \q{Soluci{\'o}n}
+\end{minipage}}
+&
+\hbox{\begin{minipage}[t]{0.4\maxfigwidth}
+\epsfxsize=0.4\maxfigwidth
+\raisebox{-0.35\maxfigwidth}[0pt][0pt]{\epsffile{\file{figures}{vacuum2-space.ps}}}
+\end{minipage}}
+\end{tabular}
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{El ejemplo del mundo de la aspiradora}
+
+\begin{tabular}{lr}
+\hbox{\begin{minipage}[t]{0.6\textwidth} \txb{Estado simple},
+comienza en \#5. \q{Soluci{\'o}n}
+\\
+$[Right,Suck]$
+\\[0.5\baselineskip]
+\txb{Estado m{\'u}ltiple}, comienza en $\{1,2,3,4,5,6,7,8\}$\\
+e.g., $Right$ llega a $\{2,4,6,8\}$. \q{Soluci{\'o}n}
+\end{minipage}}
+&
+\hbox{\begin{minipage}[t]{0.4\maxfigwidth}
+\epsfxsize=0.4\maxfigwidth
+\raisebox{-0.35\maxfigwidth}[0pt][0pt]{\epsffile{\file{figures}{vacuum2-space.ps}}}
+\end{minipage}}
+\end{tabular}
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{El ejemplo del mundo de la aspiradora}
+
+\begin{tabular}{lr}
+\hbox{\begin{minipage}[t]{0.6\textwidth} \txb{Estado simple},
+comienza en \#5. \q{Soluci{\'o}n}
+\\
+$[Right,Suck]$
+\\[0.5\baselineskip]
+\txb{Estado m{\'u}ltiple}, comienza en $\{1,2,3,4,5,6,7,8\}$\\
+e.g., $Right$ llega a $\{2,4,6,8\}$. \q{Soluci{\'o}n}
+\\
+$[Right,Suck,Left,Suck]$
+\\[0.5\baselineskip]
+\txb{Contingencia}, comienza en \#5\\
+La ley de Murphy: $Suck$ puede ensuciar una alfombra limpia\\
+Percepci{\'o}n local : sucio y ubicaci{\'o}n solamente.\\
+\q{Soluci{\'o}n}
+\end{minipage}}
+&
+\hbox{\begin{minipage}[t]{0.4\maxfigwidth}
+\epsfxsize=0.4\maxfigwidth
+\raisebox{-0.35\maxfigwidth}[0pt][0pt]{\epsffile{\file{figures}{vacuum2-space.ps}}}
+\end{minipage}}
+\end{tabular}
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{El ejemplo del mundo de la aspiradora}
+
+\begin{tabular}{lr}
+\hbox{\begin{minipage}[t]{0.6\textwidth} \txb{Estado simple},
+comienza en \#5. \q{Soluci{\'o}n}
+\\
+$[Right,Suck]$
+\\[0.5\baselineskip]
+\txb{Estado m{\'u}ltiple}, comienza en $\{1,2,3,4,5,6,7,8\}$\\
+e.g., $Right$ llega a $\{2,4,6,8\}$. \q{Soluci{\'o}n}
+\\
+$[Right,Suck,Left,Suck]$
+\\[0.5\baselineskip]
+\txb{Contingencia}, comienza en \#5\\
+La ley de Murphy: $Suck$ puede ensuciar una alfombra limpia\\
+Percepci{\'o}n local : sucio y ubicaci{\'o}n solamente.\\
+\q{Soluci{\'o}n}
+\\
+$[Right,\k{si}\ dirt\ \k{entonces}\ Suck]$
+\end{minipage}}
+&
+\hbox{\begin{minipage}[t]{0.4\maxfigwidth}
+\epsfxsize=0.4\maxfigwidth
+\raisebox{-0.35\maxfigwidth}[0pt][0pt]{\epsffile{\file{figures}{vacuum2-space.ps}}}
+\end{minipage}}
+\end{tabular}
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Formulaci{\'o}n del problema de un solo estado}
+
+Un \txr{\em problema} se define con los siguiente 4 items:
+
+\txb{\txr{\em un estado inicial}} \quad e.g., ``en Arad''
+
+\txb{\txr{\em una funci{\'o}n succesor}} $S(x)$ = un conjunto de
+pares acci{\'o}n-estado asociados a un destino \nl e.g., $S(Arad)
+= \{\<Arad\rightarrow Zerind, Zerind\>, \ldots \}$
+
+\txb{\txr{\em un test de meta}}, que puede ser \txr{\em
+expl{\'\i}cito}, e.g., $x$ = ``at Bucharest''\nl o \txr{\em
+impl{\'\i}cito}, e.g., $NoDirt(x)$
+
+\txb{\txr{\em funci{\'o}n de costos}} (aditiva)\nl e.g., la suma
+de distancias, el n{\'u}mero  de acciones ejecutadas, etc.\nl
+$c(x,a,y)$ es el \txb{costo de paso}, que se asume siempre $\geq
+0$
+
+Una \txr{\em soluci{\'o}n} es una secuencia de acciones\\
+que llevan al agente y a su ambiente desde el estado inicial hasta
+estado final
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Seleccionando un espacio de estados}
+
+El mundo se presenta de muchas maneras y con muchos detalles.
+
+Enfrentamos una enorme complejidad \nl $\Rightarrow$ el espacio de
+estados debe ser una \txr{\em abstracci{\'o}n} de esa complejidad
+para poder emprender la resoluci{\'o}n de los problemas.
+
+Un estado (abstracto) en nuestro modelo = conjunto de estados
+reales.
+
+Acci{\'o}n (abstracta)  = agregado o combinaci{\'o}n de acciones
+reales\nl
+   e.g., ``Arad $\rightarrow$ Zerind'' representa un conjunto
+   complejo de rutas possibles, desvios, paradas de descanso,
+   etc.\\
+
+Para garantizar que tal acci{\'o}n se puede realizar, es preciso
+que \txb{cualquier} estado real ``en Arad'' pueda conducir a
+\txr{\em alg{\'u}n} estado real en ``en Zerind''
+
+Soluciones (abstractas) =\nl
+    conjunto de caminos reales que son soluciones en el mundo
+    real.
+
+Cada una de las acciones abstractas debe ser ``m{\'a}s f{\'a}cil''
+que el problema original.
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{\small Ejemplo: el grafo del espacio de estados del mundo
+de la aspiradora}
+
+\epsfxsize=0.8\textwidth
+\fig{\file{figures}{vacuum2-paths.ps}}
+
+\q{estados}\\
+\q{acciones}\\
+\q{test de meta}\\
+\q{costos}
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{\small Ejemplo: el grafo del espacio de estados del mundo
+de la aspiradora}
+
+\epsfxsize=0.8\textwidth
+\fig{\file{figures}{vacuum2-paths.ps}}
+
+\q{estados}: n{\'u}mero entero para indicar sucio y ubicaci{\'o}n del robot (pero ignora  \txr{\em cantidad} de sucio)\\
+\q{acciones}: $Left$, $Right$, $Suck$, $NoOp$\\
+\q{test de meta}: no hay sucio en ninguna ubicaci{\'o}n\\
+\q{costo}: cuenta 1 por cada acci{\'o}n (0 por $NoOp$)
+
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Example: The 8-puzzle}
+
+\epsfxsize=0.6\textwidth
+\fig{\file{figures}{8puzzle.ps}}
+
+\q{estados}\\
+\q{acciones}\\
+\q{test de meta}\\
+\q{costos}
+
+
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Ejemplo: fichero de 8}
+
+\epsfxsize=0.6\textwidth
+\fig{\file{figures}{8puzzle.ps}}
+
+\q{estados}: ubicaci{\'o}n de las fichas en enteros (ignora posiciones intermedias)\\
+\q{acciones}: mover el vaci{\'o} izquierda, derecha, arriba, abajo (ignore destranque, etc.)\\
+\q{test de meta}: = cualquier configuraci{\'o}n predefinida\\
+\q{costos}: 1 por movimiento.
+
+[Nota: La soluci{\'o}n {\'o}ptima de problemas como el fichero de
+n es NP-Compleja]
+
+
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Ejemplo: El robot de ensamblaje}
+
+\epsfxsize=0.5\textwidth
+\fig{\file{figures}{stanford-arm+blocks.ps}}
+
+\q{estados}: las coordenadas (valores reales) de cada coyuntura
+del robot.\nl Las partes del objeto que ser{\'a}n ensambladas.
+
+\q{acciones}: movimientos continuos de las coyunturas del robot
+(m{\'a}s algunas acciones discretas para cambiar sus
+trayectorias).
+
+\q{test de meta}: ensamblaje completo.
+
+\q{costos}: tiempo de ejecuci{\'o}n (energia empleada??)
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Algoritmos de b{\'u}squeda en un {\'a}rbol}
+
+Idea b{\'a}sica:\al exploraci{\'o}n simulada ``offline'', del
+espacio de estados\al para lo cual se generan sucesores de los
+estados ya explorados\nnl, una t{\'e}cnica tamb{\'\i}en conocida
+como \txr{\em expandir} los estados.
+
+
+\input{\file{algorithms}{informal-ts-algorithm}}
+
+
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Ejemplo de b{\'u}squeda en un {\'a}rbol}
+
+\vspace*{0.3in}
+
+\epsfxsize=1.0\textwidth
+\fig{\sfile{figures}{search-map1.ps}}
+
+%%%%%%%%%%%% Overlay %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pheading{Ejemplo de b{\'u}squeda en un {\'a}rbol}
+
+\vspace*{0.3in}
+
+\epsfxsize=1.0\textwidth
+\fig{\sfile{figures}{search-map2.ps}}
+
+
+%%%%%%%%%%%% Overlay %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pheading{Ejemplo de b{\'u}squeda en un {\'a}rbol}
+
+\vspace*{0.3in}
+
+\epsfxsize=1.0\textwidth
+\fig{\sfile{figures}{search-map3.ps}}
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Implementaci{\'o}n: estados vs.{\~n}nodos}
+
+Un \txr{\em estado} es una (representaci{\'o}n de) una
+configuraci{\'o}n
+f{\'\i}sica\\
+
+Un \txr{\em node} es una estructura de data parte constitutiva de
+un {\'a}rbol de b{\'u}squeda\nl que incluye \txr{\em padres},
+\txr{\em
+hijos}, \txr{\em profundidad} y \txr{\em costo del camino} $g(x)$\\
+Los \txr{\em estados} no tienen padres, hijos, profundidad o costo
+del camino!.
+
+\epsfxsize=0.65\textwidth \fig{\file{figures}{state-vs-node.ps}}
+La funci{\'o}n {\sc Expand} crea nuevos nodos, completando los
+diversos campos de la estructura y usando {\sc SuccesorFn} del
+problema para crear los estados correspondientes.
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Implementaci{\'o}n: b{\'u}squeda general en un {\'a}rbol}
+
+\input{\file{algorithms}{tree-search-algorithm}}
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Estrategias de b{\'u}squeda}
+
+Cada estrategia se define en la forma de seleccionar \txr{\em el
+orden el que se ``expanden'' los (caminos de) nodos}
+
+
+Las estrategias se evaluan de acuerdo a los siguientes
+aspectos:\nl
+
+\txb{completitud}--- ?`Acaso consigue siempre una soluci{\'o}n, si
+nuna existe?\nl
+
+\txb{complejidad en tiempo}--- N{\'u}mero de nodos
+generados/expandidos\nl
+
+\txb{complejidad en memoria}--- M{\'a}ximo n{\'u}mero de nodos en
+memoria\nl
+
+\txb{optimalidad}---?`Consigue siempre una soluci{\'o}n de
+m{\'\i}nimo costo?
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Estrategias de b{\'u}squeda}
+
+Las complejidades de tiempo y espacio se miden en t{\'e}rminos de:
+
+$b$---factor de ``enramaj{\'e}' (ramificaci{\'o}n) m{\'a}ximo del
+{\'a}rbol de b{\'u}squeda\nl
+
+$d$---profundidad de la soluci{\'o}n de menor costo\nl
+
+$m$---profundidad m{\'a}xima del espacio de estados (que puede ser
+$\infty$)
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Estrategias de b{\'u}squeda no informadas}
+
+Las estrategias \txr{\em no informadas} s{\'o}lo usan la
+informaci{\'o}n
+disponible en la definici{\'o}n del problema\\
+
+B{\'u}squeda primero en anchura/Breadth-first search
+
+B{\'u}squeda de costo uniforme/Uniform-cost search
+
+B{\'u}squeda primero en profundidad/Depth-first search
+
+B{\'u}squeda de profundidad limitada/Depth-limited search
+
+B{\'u}squeda de profundizamiento iterativo/Iterative deepening
+search
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{B{\'u}squeda primero en anchura}
+
+Expanda el nodo no expandido menos profundo.
+
+\txb{Implementaci{\'o}n}:\nl \v{fringe} es una cola FIFO: los
+nuevos sucesores se agregan al final.
+
+\epsfxsize=0.5\textwidth
+\fig{\sfile{figures}{bfs-progress1.ps}}
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{B{\'u}squeda primero en anchura}
+
+Expanda el nodo no expandido menos profundo.
+
+\txb{Implementaci{\'o}n}:\nl \v{fringe} es una cola FIFO: los
+nuevos sucesores se agregan al final.
+
+\epsfxsize=0.5\textwidth
+\fig{\sfile{figures}{bfs-progress2.ps}}
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{B{\'u}squeda primero en anchura}
+
+Expanda el nodo no expandido menos profundo.
+
+\txb{Implementaci{\'o}n}:\nl \v{fringe} es una cola FIFO: los
+nuevos sucesores se agregan al final.
+
+\epsfxsize=0.5\textwidth
+\fig{\sfile{figures}{bfs-progress3.ps}}
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{B{\'u}squeda primero en anchura}
+
+Expanda el nodo no expandido menos profundo.
+
+\txb{Implementaci{\'o}n}:\nl \v{fringe} es una cola FIFO: los
+nuevos sucesores se agregan al final.
+
+\epsfxsize=0.5\textwidth
+\fig{\sfile{figures}{bfs-progress4.ps}}
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Propiedades de la b{\'u}squeda primero en anchura}
+
+\q{Completa}
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Propiedades de la b{\'u}squeda primero en anchura}
+
+\q{Completa} Si (si $b$ is finito)
+
+\q{Tiempo}
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Propiedades de la b{\'u}squeda primero en anchura}
+
+\q{Completa} Si (si $b$ is finito)
+
+\q{Tiempo} $1+b+b^2+b^3+\ldots +b^d + b(b^d-1)= O(b^{d+1})$, es
+decir, es exponencial.{\~n}en $d$
+
+\q{Espacio}
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Propiedades de la b{\'u}squeda primero en anchura}
+
+\q{Completa} Si (si $b$ is finito)
+
+\q{Tiempo} $1+b+b^2+b^3+\ldots +b^d + b(b^d-1)= O(b^{d+1})$, es
+decir, es exponencial.{\~n}en $d$
+
+\q{Espacio} $O(b^{d+1})$ (Guarda todos los nodos en memoria)
+
+\q{Optimalidad}
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Propiedades de la b{\'u}squeda primero en anchura}
+
+\q{Completa} S{\'\i} (si $b$ is finito)
+
+\q{Tiempo} $1+b+b^2+b^3+\ldots +b^d + b(b^d-1)= O(b^{d+1})$, es
+decir, es exponencial.{\~n}en $d$
+
+\q{Espacio} $O(b^{d+1})$ (Guarda todos los nodos en memoria)
+
+\q{Optimalidad} S{\'\i} (is el cost = 1 por paso); en general no
+es {\'o}ptima.
+
+El \txr{\em espacio} es el gran problema aqu{\'\i}. La estrategia
+puede generar nodos a una taza de 10MB/seg\nl Es decir, en 24
+horas son 860 GB.
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{B{\'u}squeda de costo uniforme}
+
+Expande el nodo no expandido de menor costo.
+
+\txb{Implementaci{\'o}n}:\nl \v{fringe} = cola ordenada por el
+costo del camino.
+
+Es equivalente a la b{\'u}squeda primero en anchura si todos los
+pasos son del mismo costo.
+
+\q{Completa} S{\'\i}, si el costo del paso es $\geq \epsilon$
+
+\q{Tiempo} \# de nodos con $g \leq {}$ costo de la soluci{\'o}n
+{\'o}ptima, $O(b^{\ceiling{C^*/\epsilon}})$\al donde $C^*$ es el
+costo de la soluci{\'o}n {\'o}ptima.
+
+\q{Espacio} \# de nodos con $g \leq {}$ costo de la soluci{\'o}n
+{\'o}ptima $O(b^{\ceiling{C^*/\epsilon}})$
+
+\q{Optimalidad} S{\'\i}---los nodos se expanden en el orden
+creciente de $g(n)$
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{B{\'u}squeda primero en profundidad}
+
+Expande el nodo no expandido de major profundidad.
+
+\txb{Implementaci{\'o}n}:\nl \v{fringe} = cola LIFO , es decir,
+coloca los sucesores al frente
+
+\epsfxsize=0.5\textwidth
+\fig{\sfile{figures}{dfs-progress01.ps}}
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{B{\'u}squeda primero en profundidad}
+
+Expande el nodo no expandido de major profundidad.
+
+\txb{Implementaci{\'o}n}:\nl \v{fringe} = cola LIFO , es decir,
+coloca los sucesores al frente
+
+\epsfxsize=0.5\textwidth
+\fig{\sfile{figures}{dfs-progress02.ps}}
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{B{\'u}squeda primero en profundidad}
+
+Expande el nodo no expandido de major profundidad.
+
+\txb{Implementaci{\'o}n}:\nl \v{fringe} = cola LIFO , es decir,
+coloca los sucesores al frente
+
+\epsfxsize=0.5\textwidth
+\fig{\sfile{figures}{dfs-progress03.ps}}
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{B{\'u}squeda primero en profundidad}
+
+Expande el nodo no expandido de major profundidad.
+
+\txb{Implementaci{\'o}n}:\nl \v{fringe} = cola LIFO , es decir,
+coloca los sucesores al frente
+
+\epsfxsize=0.5\textwidth
+\fig{\sfile{figures}{dfs-progress04.ps}}
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{B{\'u}squeda primero en profundidad}
+
+Expande el nodo no expandido de major profundidad.
+
+\txb{Implementaci{\'o}n}:\nl \v{fringe} = cola LIFO , es decir,
+coloca los sucesores al frente
+
+\epsfxsize=0.5\textwidth
+\fig{\sfile{figures}{dfs-progress05.ps}}
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{B{\'u}squeda primero en profundidad}
+
+Expande el nodo no expandido de major profundidad.
+
+\txb{Implementaci{\'o}n}:\nl \v{fringe} = cola LIFO , es decir,
+coloca los sucesores al frente
+
+\epsfxsize=0.5\textwidth
+\fig{\sfile{figures}{dfs-progress06.ps}}
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{B{\'u}squeda primero en profundidad}
+
+Expande el nodo no expandido de major profundidad.
+
+\txb{Implementaci{\'o}n}:\nl \v{fringe} = cola LIFO , es decir,
+coloca los sucesores al frente
+
+\epsfxsize=0.5\textwidth
+\fig{\sfile{figures}{dfs-progress07.ps}}
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{B{\'u}squeda primero en profundidad}
+
+Expande el nodo no expandido de major profundidad.
+
+\txb{Implementaci{\'o}n}:\nl \v{fringe} = cola LIFO , es decir,
+coloca los sucesores al frente
+
+\epsfxsize=0.5\textwidth
+\fig{\sfile{figures}{dfs-progress08.ps}}
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{B{\'u}squeda primero en profundidad}
+
+Expande el nodo no expandido de major profundidad.
+
+\txb{Implementaci{\'o}n}:\nl \v{fringe} = cola LIFO , es decir,
+coloca los sucesores al frente
+
+\epsfxsize=0.5\textwidth
+\fig{\sfile{figures}{dfs-progress09.ps}}
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{B{\'u}squeda primero en profundidad}
+
+Expande el nodo no expandido de major profundidad.
+
+\txb{Implementaci{\'o}n}:\nl \v{fringe} = cola LIFO , es decir,
+coloca los sucesores al frente
+
+\epsfxsize=0.5\textwidth
+\fig{\sfile{figures}{dfs-progress10.ps}}
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{B{\'u}squeda primero en profundidad}
+
+Expande el nodo no expandido de major profundidad.
+
+\txb{Implementaci{\'o}n}:\nl \v{fringe} = cola LIFO , es decir,
+coloca los sucesores al frente
+
+\epsfxsize=0.5\textwidth
+\fig{\sfile{figures}{dfs-progress11.ps}}
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{B{\'u}squeda primero en profundidad}
+
+Expande el nodo no expandido de major profundidad.
+
+\txb{Implementaci{\'o}n}:\nl \v{fringe} = cola LIFO , es decir,
+coloca los sucesores al frente
+
+\epsfxsize=0.5\textwidth \fig{\sfile{figures}{dfs-progress12.ps}}
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{\small Propiedades de la b{\'u}squeda primero en
+profundidad}
+
+\q{Completa}
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{\small Propiedades de la b{\'u}squeda primero en
+profundidad}
+
+\q{Completa} No: falla en espacios de estados infinitos y espacios
+con ciclos.\nl Se puede modificar para evitar repetir estados a lo
+largo de un camino\nnl $\Rightarrow$ lo cual hace que sea completa
+en espacios finitos (a{\'u}n con ciclos).
+
+\q{Tiempo}
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{\small Propiedades de la b{\'u}squeda primero en
+profundidad}
+
+\q{Completa} No: falla en espacios de estados infinitos y espacios
+con ciclos.\nl Se puede modificar para evitar repetir estados a lo
+largo de un camino\nnl $\Rightarrow$ lo cual hace que sea completa
+en espacios finitos (a{\'u}n con ciclos).
+
+\q{Tiempo} $O(b^m)$: muy malo si $m$ es mucho mayor que $d$\nl
+pero si las soluciones son ``densas'' en el espacio, puede ser
+mucho m{\'a}s r{\'a}pida que primero en anchura.
+
+\q{Espacio}
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{\small Propiedades de la b{\'u}squeda primero en
+profundidad}
+
+\q{Completa} No: falla en espacios de estados infinitos y espacios
+con ciclos.\nl Se puede modificar para evitar repetir estados a lo
+largo de un camino\nnl $\Rightarrow$ lo cual hace que sea completa
+en espacios finitos (a{\'u}n con ciclos).
+
+\q{Tiempo} $O(b^m)$: muy malo si $m$ es mucho mayor que $d$\nl
+pero si las soluciones son ``densas'' en el espacio, puede ser
+mucho m{\'a}s r{\'a}pida que primero en anchura.
+
+\q{Espacio} $O(bm)$, es decir, lineal en el espacio de estados!
+
+\q{Optima}
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{\small Propiedades de la b{\'u}squeda primero en
+profundidad}
+
+\q{Completa} No: falla en espacios de estados infinitos y espacios
+con ciclos.\nl Se puede modificar para evitar repetir estados a lo
+largo de un camino\nnl $\Rightarrow$ lo cual hace que sea completa
+en espacios finitos (a{\'u}n con ciclos).
+
+\q{Tiempo} $O(b^m)$: muy malo si $m$ es mucho mayor que $d$\nl
+pero si las soluciones son ``densas'' en el espacio, puede ser
+mucho m{\'a}s r{\'a}pida que primero en anchura.
+
+\q{Espacio} $O(bm)$, es decir, lineal en el espacio de estados!
+
+\q{Optima} No
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{B{\'u}squeda de profundidad limitada}
+
+= b{\'u}squeda primero en profundidad con l{\'\i}mite de profundidad $l$,\\
+es decir, los nodos a profundidad $l$ no tienen sucesores.
+
+\txb{Implementaci{\'o}n recursiva}:
+
+\input{\file{algorithms}{recursive-dls-algorithm}}
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{B{\'u}squeda de profundizamiento iterativo}
+
+\input{\file{algorithms}{ids-algorithm}}
+
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{B{\'u}squeda de profundizamiento iterativo $l=0$}
+
+\vspace*{0.3in}
+
+\epsfxsize=1.1\textwidth
+\fig{\sfile{figures}{ids-progress1.ps}}
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{B{\'u}squeda de profundizamiento iterativo $l=1$}
+
+\vspace*{0.3in}
+
+\epsfxsize=1.1\textwidth
+\fig{\sfile{figures}{ids-progress2.ps}}
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{B{\'u}squeda de profundizamiento iterativo $l=2$}
+
+\vspace*{0.3in}
+
+\epsfxsize=1.1\textwidth
+\fig{\sfile{figures}{ids-progress3.ps}}
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{B{\'u}squeda de profundizamiento iterativo $l=3$}
+
+\vspace*{0.3in}
+
+\epsfxsize=1.1\textwidth
+\fig{\sfile{figures}{ids-progress4.ps}}
+
+
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{\small Propiedades de la b{\'u}squeda de profundizamiento
+iterativo}
+
+\q{Completa}
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{\small Propiedades de la b{\'u}squeda de profundizamiento
+iterativo}
+
+\q{Completa} S{\'\i}
+
+\q{Tiempo}
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{\small Propiedades de la b{\'u}squeda de profundizamiento
+iterativo}
+
+\q{Completa} S{\'\i}
+
+\q{Tiempo} $(d+1)b^0 + d b^1 + (d-1)b^2 + \ldots + b^d = O(b^d)$
+
+\q{Espacio}
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{\small Propiedades de la b{\'u}squeda de profundizamiento
+iterativo}
+
+\q{Completa} S{\'\i}
+
+\q{Tiempo} $(d+1)b^0 + d b^1 + (d-1)b^2 + \ldots + b^d = O(b^d)$
+
+\q{Espacio} $O(bd)$
+
+\q{Optima}
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{\small Propiedades de la b{\'u}squeda de profundizamiento
+iterativo}
+
+\q{Completa} S{\'\i}
+
+\q{Tiempo} $(d+1)b^0 + d b^1 + (d-1)b^2 + \ldots + b^d = O(b^d)$
+
+\q{Espacio} $O(bd)$
+
+\q{Optima} S{\'\i}, si el costo del paso es = 1\nl Puede ser
+modificada para que explore el {\'a}rbol de costo uniforme.
+
+Comparaci{\'o}n num{\'e}rica para $b=10$ y $d=5$. La soluci{\'o}n
+a la derecha extrema:
+\begin{eqnarray*}
+N(\mbox{Prof. iterativo}) &=& 50 + 400 + 3,000 + 20,000 + 100,000 = 123,450 \\
+N(\mbox{Primero anchura}) &=& 10 + 100 + 1,000 + 10,000 + 100,000
++ 999,990 = 1,111,100
+\end{eqnarray*}
+
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Resumen de los algoritmos}
+
+\input{\file{tables}{search-summary-table}}
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{El super problema con los estados repetidos}
+
+
+La incapacidad de detectar los estados repetidos puede convertir
+un problema lineal en uno exponencial!.
+
+\vspace*{0.3in}
+
+\epsfxsize=0.7\maxfigwidth
+\fig{\file{figures}{ribbon-space.ps}}
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{B{\'u}squeda en grafos}
+
+\input{\file{algorithms}{graph-search-algorithm}}
+
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Resumen}
+
+La formulaci{\'o}n de un problema requiere usualmente que el
+agente abstraiga detalles de la realidad tal como se le presenta,
+de manera que pueda definir un espacio de estados factible para la
+b{\'u}squeda.
+
+Hay una variedad de estrategias de b{\'u}squeda no informadas.
+
+La t{\'e}cnica de profundizamiento iterativo usa solamente espacio
+lineal\\ y no mucho m{\'a}s tiempo que los otros algoritmos no
+informados.
+
+Volvamos con la formulaci{\'o}n del problema. ?`Qu{\'e} nos falta?
+?` Qu{\'e} otra clase de conocimiento se puede usar en las
+b{\'u}squedas?
+
+\end{huge}
+\end{document}

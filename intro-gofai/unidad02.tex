@@ -1,0 +1,441 @@
+\documentclass{article}
+\usepackage{fleqn}
+\usepackage{epsf}
+\usepackage[dvips]{color}
+\usepackage{aima2e-slides}
+%\usepackage[landscape]{geometry}
+
+\begin{document}
+
+\begin{huge}
+\titleslide{Agentes Inteligentes}{Unidad 2}
+
+\sf
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Intelijencia}
+
+Intelijencia, dame\\
+el nombre exacto de las cosas!\\
+$\ldots$ Que mi palabra sea\\
+la cosa misma\\
+creada por mi alma nuevamente.\\
+Que por m{\'\i} vayan todos\\
+los que no las conocen, a las cosas;\\
+que por m{\'\i} vayan todos\\
+los que ya las olvidan, a las cosas;\\
+que por m{\'\i} vayan todos\\
+los mismos que las aman, a las cosas$\ldots$\\
+!`Intelijencia, dame\\
+el nombre exacto, y tuyo,\\
+y suyo, y m{\'\i}o, de las cosas!
+
+            Juan Ram{\'o}n Jim{\'e}nez.
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Outline}
+
+\blob Los agentes y sus ambientes.
+
+\blob Racionalidad
+
+\blob Medidas de rendimiento, el ambiente, los actuadores y los
+sensores, PEAS (Performance measure, Environment, Actuators,
+Sensors)
+
+\blob Tipos de ambientes
+
+\blob Tipos de agentes
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Los agentes y sus ambientes}
+
+\epsfxsize=0.65\textwidth
+\fig{\file{figures}{agent-environment.ps}}
+
+Los \txr{Agentes} pueden ser humanos, robots, softbots,
+dispositivos como el termostato y muchos otros.
+
+La \txr{funci{\'o}n agente} transforma historias de ``perceptos"
+en acciones:
+\[f: {\cal P}^* \rightarrow {\cal A}\]
+El \txr{programa agente} se ejecuta sobre una arquitectura
+f{\'\i}sica particular para ``producir" $f$
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{El mundo de la aspiradora}
+
+\vspace*{0.3in}
+
+\epsfxsize=0.65\textwidth
+\fig{\file{figures}{vacuum2-environment.ps}}
+
+Perceptos: ubicaci{\'o}n y contenidos, e.g., $[A,Dirty]$
+
+Acciones: $left$, $right$, $suck$, $noOp$
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Un agente aspiradora}
+
+\input{tables/vacuum-agent-function-table}%
+
+\medskip
+
+\input{algorithms/reflex-vacuum-agent-algorithm}
+
+?`Qu{\'e} es la funci{\'o}n \txg{Right}? \\
+?`Podemos implementarla con un peque{\~n}o programa agente?
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Racionalidad}
+
+
+Una \txr{medida fija de rendimiento} evalua una \txg{secuencia de
+ambientes}\al
+
+-- ?`un punto por cuadro limpio en un tiempo $T$?\al -- ?`un punto
+por cuadro limpio por unidad de tiempo, menos uno por
+movimiento?\al -- ?`Penalizaci{\'o}n por ${}> k$ cuadro sucios?
+
+Un \txr{agente racional} escoge aquella acci{\'o}n que maximiza el
+valor \txr{esperado} de su medida de rendimiento \txr{respecto a
+cierta secuencia de perceptos}
+
+Racional $\neq$ omnisciente\\
+Racional $\neq$ clarividente\\
+Racional $\neq$ exitoso
+
+Racional $\implies$ exploraci{\'o}n, aprendizaje, autonom{\'\i}a.
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{PEAS}
+
+Para dise{\~n}ar un agente racional, debemos especificar el
+ambiente de trabajo.
+
+Considere, por ejemplo, el dise{\~n}o de un taxi autom{\'a}tico:
+
+
+\q{Medidas de rendimiento}
+
+\q{Ambiente}
+
+\q{Actuadores}
+
+\q{Sensores}
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{PEAS}
+
+Para dise{\~n}ar un agente racional, debemos especificar el
+ambiente de trabajo.
+
+Considere, por ejemplo, el dise{\~n}o de un taxi autom{\'a}tico:
+
+
+\q{Medidas de rendimiento} seguridad, destinos posibles,
+ganancias, status legal, confort, $\ldots$
+
+\q{Ambiente} calles y avenidas, tr{\'a}fico, peatones, clima,
+$\ldots$
+
+\q{Actuadores} volante, acelerador, freno, bocina, corneta,
+tablero, $\ldots$
+
+\q{Sensores} video, veloc{\'\i}metro, va�lvulas, sensores del
+motor, teclados, GPS, $\ldots$.
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{En agente comprador en Internet}
+
+\q{Medidas de rendimiento}
+
+\q{Ambiente}
+
+\q{Actuadores}
+
+\q{Sensores}
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Tipos de ambientes}
+
+\begin{mytabular}{@{\extracolsep\fill}|@{\squad}l@{\quad}|cccc@{\squad}|}
+\hline
+\tabhead & {Solitario} & {Backgammon} & {Compras en Internet} & {Taxi} \\
+\hline
+\tabtop
+\q{Observable}   &   &   &   &  \\
+\q{Determ{\'\i}nistico} &   &   &   &  \\
+\q{Epis{\'o}dico}      &   &   &   &  \\
+\q{Est{\'a}tico}       &   &   &   &  \\
+\q{Discreto}       &   &   &   &  \\
+\tabbot
+\q{Un-solo-agente}     &   &   &   &  \\
+\hline
+\end{mytabular}
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Tipos de ambientes}
+
+\begin{mytabular}{@{\extracolsep\fill}|@{\squad}l@{\quad}|cccc@{\squad}|}
+\hline
+\tabhead & {Solitario} & {Backgammon} & {Compras en Internet} & {Taxi} \\
+\hline \tabtop
+\q{Observable}   &  Si &  Si &  No &  No \\
+\q{Determ{\'\i}nistico} &   &   &   &  \\
+\q{Epis{\'o}dico}      &   &   &   &  \\
+\q{Est{\'a}tico}       &   &   &   &  \\
+\q{Discreto}       &   &   &   &  \\
+\tabbot
+\q{Un-solo-agente}     &   &   &   &  \\
+\hline
+\end{mytabular}
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Tipos de ambiente}
+
+\begin{mytabular}{@{\extracolsep\fill}|@{\squad}l@{\quad}|cccc@{\squad}|}
+\hline
+\tabhead & {Solitario} & {Backgammon} & {Compras en Internet} & {Taxi} \\
+\hline \tabtop
+\q{Observable}   &  Si &  Si &  No &  No \\
+\q{Determ{\'\i}nistico} & Si  & No  &  Parcialmente & No \\
+\q{Epis{\'o}dico}      &   &   &   &  \\
+\q{Est{\'a}tico}       &   &   &   &  \\
+\q{Discreto}       &   &   &   &  \\
+\tabbot
+\q{Un-solo-agente}     &   &   &   &  \\
+\hline
+\end{mytabular}
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Tipos de ambientes}
+
+\begin{mytabular}{@{\extracolsep\fill}|@{\squad}l@{\quad}|cccc@{\squad}|}
+\hline
+\tabhead & {Solitario} & {Backgammon} & {Compras en Internet} & {Taxi} \\
+\hline \tabtop
+\q{Observable}   &  Si &  Si &  No &  No \\
+\q{Determ{\'\i}nistico} & Si  & No  &  Parcialmente & No \\
+\q{Epis{\'o}dico}      & No  & No  &  No & No \\
+\q{Est{\'a}tico}       &   &   &   &  \\
+\q{Discreto}       &   &   &   &  \\
+\tabbot
+\q{Un-solo-agente}     &   &   &   &  \\
+\hline
+\end{mytabular}
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Tipos de ambientes}
+
+\begin{mytabular}{@{\extracolsep\fill}|@{\squad}l@{\quad}|cccc@{\squad}|}
+\hline
+\tabhead & {Solitario} & {Backgammon} & {Compras en Internet} & {Taxi} \\
+\hline \tabtop
+\q{Observable}   &  Si &  Si &  No &  No \\
+\q{Determ{\'\i}nistico} & Si  & No  &  Parcialmente & No \\
+\q{Epis{\'o}dico}      & No  & No  &  No & No \\
+\q{Est{\'a}tico}       &  Si &  Semi  & Semi  &  No \\
+\q{Discreto}       &   &   &   &  \\
+\tabbot
+\q{Un-solo-agente}     &   &   &   &  \\
+\hline
+\end{mytabular}
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Tipos de ambientes}
+
+\begin{mytabular}{@{\extracolsep\fill}|@{\squad}l@{\quad}|cccc@{\squad}|}
+\hline
+\tabhead & {Solitario} & {Backgammon} & {Compras en Internet} & {Taxi} \\
+\hline \tabtop
+\q{Observable}   &  Si &  Si &  No &  No \\
+\q{Determ{\'\i}nistico} & Si  & No  &  Parcialmente & No \\
+\q{Epis{\'o}dico}      & No  & No  &  No & No \\
+\q{Est{\'a}tico}       &  Si &  Semi  & Semi  &  No \\
+\q{Discreto}       & Si  & Si  & Si  & No \\
+\tabbot
+\q{Un-solo-agente}     &   &   &   &  \\
+\hline
+\end{mytabular}
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Tipos de ambientes}
+
+\begin{mytabular}{@{\extracolsep\fill}|@{\squad}l@{\quad}|cccc@{\squad}|}
+\hline
+\tabhead & {Solitario} & {Backgammon} & {Compras en Internet} & {Taxi} \\
+\hline \tabtop
+\q{Observable}   &  Si &  Si &  No &  No \\
+\q{Determ{\'\i}nistico} & Si  & No  &  Parcialmente & No \\
+\q{Epis{\'o}dico}      & No  & No  &  No & No \\
+\q{Est{\'a}tico}       &  Si &  Semi  & Semi  &  No \\
+\q{Discreto}       & Si  & Si  & Si  & No \\
+\tabbot
+\q{Un-solo-agente}     & Si  & No  &  Si (salvo subastas) & No \\
+\hline
+\end{mytabular}
+
+El tipo de ambiente determina, en buena medida, el dise{\~n}o del
+agente.
+
+El mundo real es (?`desde luego?) parcialmente observable,
+estoc{\'a}stico, secuencial, din{\'a}mico, continuo y multiagente.
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Tipos de agentes}
+
+Listamos 4 tipos b{\'a}sicos en orden de generalidad creciente
+(segu'n R\&N):\al
+
+-- Agente simple reflejo\al
+
+-- Agente reflejo con estado\al
+
+-- Agentes orientado a metas\al
+
+-- Agentes basados en utilidad
+
+Todos se pueden convertir en agentes aprendices.
+
+Ver tambi{\'e}n la jer{\'a}rquia de [Davila, Uzc{\'a}tegui,
+Tucci].
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Agente simple reflejo}
+
+\epsfxsize=0.95\textwidth
+\fig{\file{figures}{simple-reflex-agent.ps}}
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Agente reflejo con estado}
+
+\epsfxsize=0.95\textwidth
+\fig{\file{figures}{reflex+state-agent.ps}}
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Agente orientado a metas}
+
+\epsfxsize=0.95\textwidth
+\fig{\file{figures}{goal-based-agent.ps}}
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Agente basado en utilidad}
+
+\epsfxsize=0.95\textwidth
+\fig{\file{figures}{utility-based-agent.ps}}
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Agente aprendiz}
+
+\epsfxsize=0.95\textwidth
+\fig{\file{figures}{learning-agent.ps}}
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{c{\'o}digo AIMA}
+
+\begin{verbatim}
+(setq joe (make-agent :name 'joe :body (make-agent-body)
+                      :program (make-dumb-agent-program)))
+
+(defun make-dumb-agent-program ()
+  (let ((memory nil))
+    #'(lambda (percept)
+        (push percept memory)
+        'no-op)))
+\end{verbatim}
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{c{\'o}digo Bioinformantes: un tutor}
+
+\begin{verbatim}
+% Integrity constraints.
+if biotutor_requested, not(class_opened) then open_class. \\
+if class_opened, not(seen_something) then show_page_1.\\
+if class_opened, seen_page_1, not(pending_queries) then
+close_class.\\
+if seen_page_1, want_a_demo then do_method.\\
+if user_continue, method_running then do_yes.\\
+if question_asked then answer_question.\\
+
+% Definitions
+to seen_something do seen_page_1.\\
+to seen_something do user_continue.
+\end{verbatim}
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{c{\'o}digo Galatea: Un colono}
+
+\begin{verbatim}
+executable(invade). executable(tala). executable(cultiva).
+executable(invade_vecino). executable(anexa).
+executable(afiliate). executable(vende_tierra).
+executable(subsiste). executable(compra_tierra).
+executable(siembra_ganado).
+
+observable(tienes_tierra). observable(tienes_dinero).
+observable(extension_posible).
+observable(te_solicitan_apoyo_politico).
+
+si not(tienes_tierra), not(tienes_dinero) entonces
+invade_y_subsiste.\\
+si tienes_tierra, extension_posible entonces invade_vecino.\\
+si te_solicitan_apoyo_politico, te_dan_tierra entonces afiliate.
+si tienes_tierra, not(tienes_dinero) entonces
+vende_y_subsiste_con_eso.\\
+si tienes_tierra, tienes_dinero entonces explotacion_ganadera.
+
+para invade_y_subsiste haga
+    invade, % define un terreno para este agente.
+    tala,   % inicia una trayectoria de tala en ese terreno,
+            % lineal, 20 hectareas en 5 a#os.
+    cultiva.    % inicia una trayectoria de cultivo en ese terreno.
+
+para invade_vecino haga
+    anexa.  % inicia una trayectoria de tala o extendiende
+        % la del resto de su propiedad
+        % extendiende la trayectoria del capital.
+
+para vende_y_subsiste_con_eso haga
+    vende_tierra, % Inicia trayectoria de capital con intereses.
+    subsiste. % Inicia una trayectoria de gastos de supervivencia.
+
+para explotacion_ganadera haga
+    compra_tierra,  % afecta trayectoria del capital.
+    siembra_ganado. % inicia trayectoria del reba#o y del capital.
+\end{verbatim}
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{c{\'o}digo Galatea: Un politiquero}
+
+\begin{verbatim}
+executable(solicita_apoyo). executable(ofrece_tierra).
+
+observable(tienes_tierra). observable(observo_colono).
+
+% Integrity constraints.
+si observo_colono, tienes_tierra entonces negocia_tierra_por_voto.
+
+% Definitions
+para negocia_tierra_por_voto haga
+    solicita_apoyo,
+    ofrece_tierra.
+
+observe tienes_tierra. observe observo_colono.
+\end{verbatim}
+
+\end{huge}
+\end{document}

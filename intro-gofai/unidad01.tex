@@ -1,0 +1,519 @@
+\documentclass[10pt]{article}
+%\usepackage{fleqn}
+\usepackage{epsf}
+\usepackage[dvips]{color}
+\usepackage{aima2e-slides}
+%\usepackage{lscape} 
+%\usepackage{pdflscape}
+\special{landscape}
+%\usepackage[landscape]{geometry}
+
+\begin{document}
+
+%\begin{landscape}
+
+\begin{huge}
+\titleslide{Inteligencia Artificial}{Unidad 1}
+
+\sf
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Contenido}
+
+\blob Visi{\'o}n y misi{\'o}n del curso
+
+\blob ?`Qu{\'e} es Inteligencia Artificial?
+
+\blob La historia resumida
+
+\blob ``El estado del arte"
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Administrivia}
+
+Sitios Web: 
+\verb|http://webdelprofesor.ula.ve/ingenieria/jacinto|\\
+\verb|http://jacinto-davila.blogspot.com|\\
+
+Libro: Russell and Norvig \u{Artificial Intelligence: A Modern Approach}\\
+
+C{\'o}digos: los programas del libro en lisp, PROLOG, C++, Python
+y Java est{\'a}n en\\
+
+\verb|http://aima.cs.berkeley.edu/|\\
+\verb|http://www.doc.ic.ac.uk/~rak/|\\
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Misi{\'o}n y Visi{\'o}n del curso}
+
+\blob Visi{\'o}n: Un entorno social m{\'a}s inteligente, causa y
+consecuencia del trabajo colectivo\\
+
+\blob Misi{\'o}n: Proveer herramientas tecnol{\'o}gicas para ese
+trabajo colectivo (que aprovechen y que conduzcan a m{\'a}s
+inteligencia).
+
+\blob Hip{\'o}tesis: La inteligencia artificial puede favorecer a
+la inteligencia na\-tural.
+
+\blob Contexto: Un mundo en postpandemia (?`Qu{\'e} tiene que ver el contexto?).
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{?`Cu{\'a}les temas contiene este curso?}
+
+\blob Agentes inteligentes ($\surd$)\\
+\blob B{\'u}squeda ($\surd$) y juegos \\
+\blob Sistemas basados en l{\'o}gica ($\surd$)\\
+\blob Sistemas de planificaci{\'o}n ($\surd$)\\
+\blob Incertidumbre, probabilidad y teoria de decisiones en IA($\surd$)\\
+\blob Aprendizaje ($\surd$)\\
+\blob Lenguaje\\
+\blob Percepci{\'o}n\\
+\blob Rob{\'o}tica\\
+\blob El contacto con la filosof{\'\i}a\\
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{?`Qu{\'e} es la Inteligencia Artificial?}
+
+\vspace*{1in}
+
+La tabla de Russell y Norvig:
+
+\vspace*{1in}
+
+\centerline{\input{tables/ai-is-table}}
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{?`Qu{\'e} es la Inteligencia Artificial?}
+
+$\ldots$ seg{\'u}n Kowalski:
+
+La visi{\'o}n convencional: la soluci{\'o}n computacional de
+tareas normalmente asociadas con la inteligencia humana. Por
+ejemplo, jugar ajedrez.
+
+Una visi{\'o}n m{\'a}s precisa: El uso de m{\'e}todos
+sistem{\'a}ticos, al estilo de los humanos, aplicados a cualquier
+tarea realizada por humanos o por m{\'a}quinas.
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{?`Qu{\'e} NO es la Inteligencia Artificial?}
+
+$\ldots$ seg{\'u}n Kowalski, son falacias comunes:
+
+\blob que el objetivo de la inteligencia artificial es crear
+m{\'a}quinas que ser{\'a}n m{\'a}s inteligentes que los humanos y
+los tratar{\'a}n como sus mascotas.
+
+\blob que la IA es factible porque, despu{\'e}s de todo, las
+personas son s{\'o}lo m{\'a}quinas.
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{?`Por qu{\'e} es importante la IA?}
+
+$\ldots$ seg{\'u}n Kowalski:
+
+\blob Las realizaciones y productos computacionales son m{\'a}s
+f{\'a}ciles de desarrollar, mantener y manipular.
+
+\blob Podr{\'\i}a proveernos de teor{\'\i}as de la inteligencia
+humana simulables en el computador (o computadores).
+
+\blob Teor{\'\i}as la inteligencia humana que podr{\'\i}an ser
+aplicadas sistem{\'a}ticamente (es decir, como en ingenier{\'\i}a)
+por las m{\'a}quinas o por los mismos humanos.
+
+La mayor{\'\i}a de los m{\'e}todos de la inteligencia artificial
+pueden ser vistos como versiones pr{\'a}cticas de la l{\'o}gica
+formal.
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Actuando como humanos: el test de Turing}
+
+Turing (1950) ``Computing machinery and intelligence":\\
+
+\blob ``?`Pueden pensar las m{\'a}quinas?''\\
+ $\longrightarrow$ ``?`Pueden las m{\'a}quinas comportarse inteligentemente?''\\
+
+\blob Test operativo de la conducta inteligente: El juego de
+imitaci{\'o}n del humano.
+
+\vspace*{0.2in}
+
+\epsfxsize=0.5\textwidth
+\fig{\file{figures}{turing.ps}}
+
+\blob predijo que para el 2000, una m{\'a}quina podr{\'\i}a, con
+una probabilidad de 30\%, enga{\~n}ar a una persona no advertida
+por unos 5 minutos.
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Actuando como humanos: el test de Turing}
+
+No lo han logrado oficialmente. Pero prueben\\
+\verb|https://www.kuki.ai/| y\\
+
+\blob (S{\'o}lo por completitud, revisen este\\
+\verb|https://sourceforge.net/projects/resumidor|\\
+\verb|https://github.com/jacintodavila/resumidor|\\
+
+\blob previ{\'o} todos los argumentos contra la IA en los siguientes 50 a{\~n}os\\
+
+\blob sugiri{\'o} que los componentes principales de la IA son: el
+conocimiento, el razonamiento, la comprensi{\'o}n ling{\"u}istica
+y el aprendizaje\\
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Actuando como humanos: el test de Turing}
+
+Un gran problema: El test de Turing no es \txr{reproducible},\\
+ni \txr{constructivo}, \\
+ni adecuado para \txr{an{\'a}lisis matem{\'a}tico}.\\
+
+Y qu{\'e}?
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Pensando como los humanos: Cognitive Science}
+
+1960s ``\txg{La revoluci{\'o}n cognitiva}'': la psicolog{\'\i}a
+del procesamiento de la informaci{\'o}n reemplaz{\'o} la
+perspectiva ortodoxa del \txb{conductivismo}.
+
+Requiere teor{\'\i}as acerca de las actividades internas del
+cerebro\al
+ -- ?`Cual nivel de abstracci{\'o}n? ``\txg{Conocimiento}'' or ``\txg{?`circuiter{\'\i}a}''?\al
+ -- ?`C{\'o}mo se validan? Algunos dicen que \nl
+    1)Anticipando y evaluando la conducta de sujetos humanos (top-down)
+    o 2) Identificaci{\'o}n directa de data neurol{\'o}gica (bottom-up)
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Pensando como los humanos: Cognitive Science}
+
+Ambas m{\'e}todologias ( \txm{Cognitive Science} y \txb{Cognitive
+Neuroscience}) se han distanciado ahora de la IA.
+
+Ambas comparten con IA la siguiente caracter{\'\i}stica:{\em las
+teor{\'\i}as actuales no explican (o producen) nada que se parezca
+a la inteligencia humana}.
+
+En consecuencia, los tres ``campos" comparten la misma
+direcci{\'o}n. (frustaci{\'o}n?)
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Pensando racionalmente}
+
+Las leyes del pensamiento.
+
+\txr{Normativo} (o \txr{impositivo}) en lugar de \txg{descriptivo}
+(pero correcto desde todo punto de vista).
+
+Arist{\'o}teles: ?`cuando es correcto un argumento o proceso de
+pensamiento?
+
+En la antigua Grecia se desarrollaron varias formas de
+\txr{l{\'o}gica}: \txr{notaciones} y \txr{reglas de inferencia};
+que quiz{\'a}s pudieron haber contemplado la mecanizaci{\'o}n.
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Pensando racionalmente}
+
+En cualquier caso, nuestra matem{\'a}tica y filosof'ia moderna le
+heredan esa tradici{\'o}n a la IA.
+
+Problemas:
+
+1) Se dice que no toda conducta inteligente es precedida por un
+razonamiento l{\'o}gico (?`es esto una objecci{\'o}n?).
+
+2) Otros dicen: ?`Qu{\'e} prop{\'o}sito tiene pensar?. ?`Qu{\'e}
+pensamientos \txr{debo} tener? (de nuevo, ?`es esto una
+objecci{\'o}n?)
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Actuando racionalmente}
+
+Conducta \txr{racional}: hacer lo correcto
+
+Lo correcto: Aquello que se espera maximice el logro de las metas,
+dada la informaci{\'o}n disponible. (?`Maximice?).
+
+No implica necesariamente que se est{\'a} pensando en hacer lo
+correcto --e.g., muchos reflejos como el parpadear son ``hacer lo
+correct{\'o}'--- pero, se dice, que el pensamiento tiene que estar
+al servicio de la acci{\'o}n racional.
+
+Arist{\'o}teles (La Etica de Nic{\'o}medes):\al
+  \txb{Todo arte y todas pregunta, y similarmente toda  acci{\'o}n
+y procura, se supone que se orienta a alg{\'u}n beneficio}
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Raz{\'o}n}
+
+\blob Raz{\'o}n: 1) Facultad de pensar, discurrir y juzgar. 2)
+Facultad intelectual que permite actuar acert{\'a}damente o
+distinguir lo bueno y verdadero de lo malo y falso. 3) Motivo.
+[Diccionario Larousse].
+
+\blob Reason: 1) a motive, cause or justification. 2) a fact
+adduced or serving at this. 3) The intellectual faculty by which
+conclusions are drawn from premises. 4) Sanity. 5) A faculty
+transcending the understanding and providing a priori principles;
+intuition. 7) Sense; what is right or practical or practicable:
+``it stands to reason" is equivalent to ``it is evident or
+logical" (The concise Oxford dictionary).
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Agentes racionales}
+
+Un \txr{agente} es una entidad que percibe y act{\'u}a.
+
+En este curso se aprende a dise{\~n}ar \txr{agentes racionales}
+(a{\'u}n cuando parte del dise{\~n}o se fije en su ambiente)
+
+Usando la matem{\'a}tica como lenguaje de especificaci{\'o}n,
+podemos decir que un agente es una funci{\'o}n con dominio en una
+``historia perceptual'' y rango en las acciones:
+\[f: {\cal P}^* \rightarrow {\cal A}\]
+Buscaremos, para cada tipo dado de ambiente y de tarea\\
+el agente (o clase de agentes) que se comporta de la mejor manera.
+
+Observaci{\'o}n: \txr{{\em Las limitaciones computaciones hacen
+que la racionalidad perfecta sea inalcanzable}} $\rightarrow$
+Dise{\~n}aremos el mejor \txr{programa} con los recursos dados.
+
+O trataremos de ajustar algunos recursos para aumentar la
+racionalidad.
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{La prehistoria de la IA}
+
+\begin{tabular}{ll}
+\txb{Filosof{\'\i}a}    & La l{\'o}gica como un m{\'e}todo para razonar\\
+\tabbot                 & La mente como un sistema f{\'\i}sico\\
+\tabbot                 & Los fundamentos del aprendizaje,\\ 
+\tabbot                 & del lenguaje y de la racionalidad\\
+\txb{Matem{\'a}tica}    & Representaciones formales y demostraciones\\
+\tabbot                 & Algoritmos, computaci{\'o}n, \\
+\tabbot                 & (in)decidibilidad, (in)tratabilidad,\\
+\tabbot                 & probabilidad\\
+\txb{Psicolog{\'\i}a}   & Adaptaci{\'o}n\\
+\tabbot                 & Los fen{\'o}menos de la percepci{\'o}n\\
+\tabbot                 & y el control motor\\
+\tabbot                 & psicof{\'\i}sica, etc.\\
+\txb{Econom{\'\i}a}     & Teor{\'\i}a formal de \\
+\tabbot                 & decisiones racionales\\
+\txb{Ling{\"u}istica}       & Representaci{\'o}n del conocimiento,\\
+\tabbot                 & gram{\'a}ticas\\
+\txb{Neurociencia}      & el substrato f{\'\i}sico \\
+\tabbot                 & vers{\'a}til para la actividad mental\\
+\txb{Teor{\'\i}a de Control}& Sistemas homeost{\'a}ticos, estabilidad\\
+\tabbot                 & Agentes simples y {\'o}ptimos
+\end{tabular}
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{La historia ``enlatada" de la IA}
+\begin{tabular}{ll}
+\txg{1943}       & McCulloch \& Pitts: Modelo del cerebro con circuitos booleanos\\
+\txg{1950}       & Turing: ``Computing Machinery and Intelligence"\\
+\txg{1952--69}   & Auto frenes{\'\i}! \\
+\txg{1950s}      & Primeros programas de IA: Newell \& Simon's Logic Theorist\\
+\txg{1956}       & Conferencia de Dartmouth: Surge el nombre ``Artificial Intelligence"\\
+\txg{1965-72}    & El m{\'e}todo de resoluci{\'o}n de Robinson y luego Kowalski\\
+                 & (un algoritmo completo para razonamiento l{\'o}gico) -- PROLOG\\
+\txg{1966--74}   & La IA se encuentra con la complejidad computacional\\
+           & La investigaci{\'o}n en redes neuronales casi desaparece\\
+\txg{1969--79}   & Los primeros sistemas basados en conocimiento\\
+\txg{1980--88}   & Se popularizan los sistemas expertos\\
+\txg{1988--93}   & Se desinflan los sistemas expertos: ``El primer invierno de la IA"\\
+\txg{1985--95}   & Vuelven las redes neuronales\\
+\txg{1988}--     & Reaparece la probabilidad: aumenta el rigor t{\'e}cnico\\
+           & ``Nouvelle AI": Vida Artificial, AG, soft computing\\
+\txg{1995}--     & Agentes!!!!\\ 
+\txg{2000}--     & Machine Learning (Deep learning) $\ldots$
+\end{tabular}
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{La historia gruesa de la IA}
+\begin{tabular}{ll}
+\txg{1950s y 1960s}                     & B{\'u}squeda, juegos y redes neuronales\\
+\txg{1960 y principios de '70s}         & Prueba autom{\'a}tica de teoremas\\
+\txg{Los '70s y principios de '80s}     & Representaciones del conocimiento\\
+                                        & Programaci{\'o}n l{\'o}gica\\
+                                        & Sistemas expertos\\
+\txg{Los '80s}                          & El proyecto de 5ta Generaci{\'o}n Japon{\'e}s\\
+                                        & L{\'o}gicas para razonamiento por omisi{\'o}n\\
+                                        & Razonamiento basado en casos\\
+\txg{Finales 80s al presente}           & Redes neuronales\\
+                                        & Aprendizaje (miner{\'\i}a de datos)\\
+                                        & Sistemas reactivos (vs. racionales)\\
+                                        & Inteligencia Artificial Distribuida\\
+                                        & Sistemas multiagentes\\
+                                        & Sociedades artificiales\\
+\txg{Siglo XXI}                         & Redes neuronales\\
+                                        & Aprendizaje (miner{\'\i}a de muchos datos)\\
+\end{tabular}
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{El estado del arte}
+
+?`Cu{\'a}les de estas se pueden hacer en estos momentos?
+
+\blob Jugar ping-pong decentemente \\
+\blob Conducir en la monta{\~n}a \\
+\blob Conducir en el centro de una ciudad \\
+\blob Comprar el mercado de la semana \\
+\blob Comprar el mercado de la semana en la web \\
+\blob Jugar un ``bridg{\'e}' decentemente \\
+\blob Descubrir y probar nuevos teoremas matem'aticos \\
+\blob Escribir una historia divertida con toda la intenci{\'o}n \\
+\blob Proveer consejo legal competente en una {\'a}rea especializada de la ley\\
+\blob Traducir en tiempo real\\
+\blob Realizar una intervenci{\'o}n quir{\'u}jica complicada
+\blob Interactuar con fluidez con humanos
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{El estado de nuestro arte}
+
+\blob Sistemas multiagentes (Bioinformantes)\\
+\verb|https://sourceforge.net/projects/simulants|\\
+\blob Simulaci{\'o}n de sistemas multiagentes (GALATEA)\\
+\verb|http://galatea.sourceforge.net/|\\
+\verb|http://gloria.sourceforge.net/|\\
+\blob Ling{\"u}istica computacional (Elizaul, Resumidor, Metaforizador)\\
+\verb|https://sourceforge.net/projects/resumidor|\\
+\verb|https://github.com/jacintodavila/resumidor|\\
+\verb|https://www.logicalcontracts.com/|\\
+
+\blob ?`Qu{\'e} sabemos hacer localmente?
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Historias divertidas sin intenci{\'o}n}
+
+pero en ingl{\'e}s
+
+One day Joe Bear was hungry. He asked his friend Irving Bird where some
+honey was. Irving told him there was a beehive in the oak tree. Joe threatened
+to hit Irving if he didn't tell him where some honey was.
+
+Henry Squirrel was thirsty. He walked over to the river bank where his
+good friend Bill Bird was sitting. Henry slipped and fell in the
+river. Gravity drowned.
+
+Once upon a time there was a dishonest fox and a vain crow. One day the
+crow was sitting in his tree, holding a piece of cheese in his mouth. He
+noticed that he was holding the piece of cheese. He became hungry, and
+swallowed the cheese. The fox walked over to the crow. The end.
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Historias divertidas sin intenci{\'o}n}
+
+pero en ingl{\'e}s
+
+Joe Bear was hungry. He asked Irving Bird where some honey was.
+Irving refused to tell him, so Joe offered to bring him a worm if
+he'd tell him where some honey was.  Irving agreed. But Joe didn't
+know where any worms were, so he asked Irving, who refused to say.
+So Joe offered to bring him a worm if he'd tell him where a worm
+was.  Irving agreed. But Joe didn't know where any worms were, so
+he asked Irving, who refused to say. So Joe offered to bring him a
+worm if he'd tell him where a worm was $\ldots$
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Historias divertidas con intenci{\'o}n}
+
+ parcial (pero en espa{\~n}ol):
+
+\begin{verbatim}
+?- modelo.
+   actantes:
+      sujetos:
+         suj_cogn:
+            destinadores:
+               desd_suj:
+                  --> la_virgen_de_la_chinita
+               anti_desd:
+                  --> gente_del_barrio
+
+            destinatarios:
+               dest_suj:
+                  --> mari-mach�
+               anti_dest:
+                  --> macky_narr
+\end{verbatim}
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Historias divertidas con intenci{\'o}n}
+
+ parcial (pero en espa{\~n}ol).
+
+\begin{verbatim}
+
+         suj_prag:
+            sujeto:
+               heroe:
+                  --> ernesto_ernesto
+               adyuvante:
+                  --> el_negro_mesopotamio
+
+            anti_suj:
+               traidor:
+                  --> el_jefe_de_la_mafia
+               oponente:
+                  --> la_mafia
+\end{verbatim}
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Historias divertidas con intenci{\'o}n}
+
+ parcial (pero en espa{\~n}ol).
+
+
+\begin{verbatim}
+
+      objetos:
+         obj_mod:
+            obj_mod_cogn:
+               --> voluntad_y_prohibicion
+            obj_mod_prag:
+               --> discrecion_e_incapacidad
+
+         obj_prag:
+            obj_valor:
+               --> el_amor_sincero
+            obj_uso:
+               --> la_carta_secreta
+\end{verbatim}
+
+
+%%%%%%%%%%%% Slide %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\heading{Ensayos inteligentes}
+
+\blob La inteligencia y los sentimientos \\
+\blob La inteligencia y lo subjetivo \\
+\blob La inteligencia individual y la inteligencia colectiva\\
+\blob La inteligencia y racionalidad acotada\\
+\blob La inteligencia y el mercado\\
+\blob La inteligencia y los servicios p{\'u}blicos\\
+\blob La inteligencia natural y la inteligencia artificial\\
+\blob La inteligencia y el tiempo\\
+\blob Los sistemas cercanos que son muy inteligentes\\
+\blob Los sistemas cercanos que podr{\'\i}an ser m{\'a}s inteligentes\\
+\blob La inteligencia y la democracia\\
+\blob La inteligencia y la sabiduria\\
+\blob La inteligencia y la evoluci{\'o}n\\
+\blob La inteligencia y la felicidad\\
+\blob La inteligencia y la justicia\\
+\blob La inteligencia, la moralidad y la corrupci{\'o}n\\
+\blob La inteligencia y la complejidad\\
+\blob La inteligencia y el lenguaje\\
+
+
+\end{huge}
+%\end{landscape}
+\end{document}
